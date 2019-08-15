@@ -5,7 +5,7 @@ I created this for my learning.
 
 [View Demo](https://chocolat5.github.io/react-filter-text-demo/)
 
-* Use `filter()` for filter on text entered in `input`
+* Use `filter()` for filter posts by text entered in `input`
 * Use `async / await` for filter posts after `handleChange`
 
 
