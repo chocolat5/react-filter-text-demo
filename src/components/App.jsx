@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PostList from './PostList';
 import SearchBar from './SearchBar';
 import '../styles/style.scss';
@@ -12,55 +12,41 @@ const POSTS = [
   {category: 'React', title: 'Reactで作るTodoアプリ', date: '2019.6.5'},
 ];
 
-class App extends Component {
-  state = {
-    filterText: '',
-    posts: POSTS,
-    filteredPosts: [],
-  }
+const App = () => {
+  const [posts, setPosts] = useState(POSTS);
+  const [filterText, setFilterText] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState(posts);
 
-  componentDidMount() {
-    this.setState({filteredPosts: this.state.posts})
-  }
+  useEffect(() => {
+    setFilteredPosts(filteredPosts);
+  }, [filteredPosts]);
 
-  handleChange = async event => {
-    const { name, value } = event.target;
+  const handleChange = async event => {
+    await setFilterText(event.target.value);
+    await onFilterPosts();
+  };
 
-    await this.setState({
-      [name]: value,
-    });
-
-    this.filterPosts();
-  }
-
-  filterPosts = () => {
-    const { posts, filterText } = this.state;
-
-    let filteredPosts = posts.filter((post) => {
+  const onFilterPosts = useCallback(() => {
+    let newFilteredPosts = posts.filter((post) => {
       return post.title.toLowerCase().includes(filterText.toLowerCase())
     });
 
-    this.setState({ filteredPosts });
-  }
+    setFilteredPosts(newFilteredPosts);
+  }, [filterText]);
 
-  render () {
-    const { filteredPosts, filterText } = this.state;
-
-    return (
-      <div className="app">
-        <header className="app_header">
-          <h1>React Filter Text</h1>
-        </header>
-        <main className="container">
-          <SearchBar
-            filterText={filterText}
-            handleChange={this.handleChange} />
-          <PostList
-            posts={filteredPosts} />
-        </main>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="app">
+      <header className="app_header">
+        <h1>React Filter Text</h1>
+      </header>
+      <main className="container">
+        <SearchBar
+          filterText={filterText}
+          handleChange={handleChange} />
+        <PostList posts={filteredPosts} />
+      </main>
+    </div>
+  );
+};
 
 export default App;
