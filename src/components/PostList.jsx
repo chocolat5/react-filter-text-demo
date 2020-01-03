@@ -1,7 +1,7 @@
 import React from 'react';
 
-const PostRow = props => {
-  return props.posts.map((post, index) => {
+const PostRow = ({ posts }) => {
+  return posts.map((post, index) => {
     return (
       <li key={index}>
         <p className="post_title">{post.title}</p>

@@ -13,24 +13,25 @@ const POSTS = [
 ];
 
 const App = () => {
-  const [posts, setPosts] = useState(POSTS);
   const [filterText, setFilterText] = useState('');
-  const [filteredPosts, setFilteredPosts] = useState(posts);
+  const [filteredPosts, setFilteredPosts] = useState(POSTS);
 
   useEffect(() => {
-    setFilteredPosts(filteredPosts);
-  }, [filteredPosts]);
+    if (filterText !== '') {
+      onFilterPosts();
+    } else {
+      setFilteredPosts(POSTS);
+    }
+  }, [, filteredPosts, filterText]);
 
   const handleChange = async event => {
     await setFilterText(event.target.value);
-    await onFilterPosts();
   };
 
   const onFilterPosts = useCallback(() => {
-    let newFilteredPosts = posts.filter((post) => {
+    const newFilteredPosts = filteredPosts.filter((post) => {
       return post.title.toLowerCase().includes(filterText.toLowerCase())
     });
-
     setFilteredPosts(newFilteredPosts);
   }, [filterText]);
 
